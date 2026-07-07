@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "airbnb-ops"
+version = "0.1.0"
+description = "HW01-A: Airbnb data pipeline"
+requires-python = ">=3.10"
+dependencies = [
+    "pandas>=2.0",
+    "typer>=0.9",
+    "rich>=13.0",
+]
+authors = [
+    { name = "Parham Rahimi" }
+]
+
+[project.scripts]
+airbnb-ops = "airbnb_ops.cli:app"
+
+[tool.setuptools.packages.find]
+where = ["src"]

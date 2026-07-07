@@ -1,0 +1,14 @@
+.git
+.venv
+__pycache__
+.ipynb_checkpoints
+*.pyc
+.eggs
+*.egg-info
+build/
+dist/
+data/processed
+reports
+*.xlsx
+~*
+.DS_Store
