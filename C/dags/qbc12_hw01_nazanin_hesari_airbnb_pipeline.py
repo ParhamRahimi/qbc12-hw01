@@ -88,13 +88,19 @@ with DAG(
 
     @task
     def read_config():
-        """Read DB connection settings from Airflow Variables."""
+        """Read DB connection settings from Airflow Variables, with fallbacks."""
+        def _v(key, default):
+            try:
+                return Variable.get(key)
+            except Exception:
+                return default
+
         return {
-            "host": Variable.get("qbc12_db_host"),
-            "port": Variable.get("qbc12_db_port"),
-            "dbname": Variable.get("qbc12_db_name"),
-            "user": Variable.get("qbc12_db_user"),
-            "password": Variable.get("qbc12_db_password"),
+            "host": _v("qbc12_db_host", "185.50.38.163"),
+            "port": _v("qbc12_db_port", "32112"),
+            "dbname": _v("qbc12_db_name", "qbc12_airbnb"),
+            "user": _v("qbc12_db_user", "student_nazanin_hesari"),
+            "password": _v("qbc12_db_password", "AJsl6KVqVavYZm3bEO"),
             "schema": STUDENT_SCHEMA,
         }
 
