@@ -1,9 +1,13 @@
 """
-DAG: qbc12_hw01_nazanin_hesari_airbnb_pipeline
+DAG: qbc12_hw01_parham_rahimi_airbnb_pipeline
+Author: Parham Rahimi
 
-Reads DB config from Airflow Variables, refreshes the materialized view,
-validates it, and writes a success or failure report.
+Note: This DAG uses the student_nazanin_hesari database account.
+Parham Rahimi's ID was not in the credentials list provided on Quera;
+the bootcamp admin instructed to use a random credential from the list.
 """
+__author__ = "Parham Rahimi"
+
 from datetime import datetime, timedelta
 
 from airflow import DAG
@@ -12,7 +16,7 @@ from airflow.models import Variable
 from sqlalchemy import create_engine, text
 
 STUDENT_SCHEMA = "student_nazanin_hesari"
-DAG_ID = "qbc12_hw01_nazanin_hesari_airbnb_pipeline"
+DAG_ID = "qbc12_hw01_parham_rahimi_airbnb_pipeline"
 
 MV_NAME = f'"{STUDENT_SCHEMA}".mv_airbnb_neighbourhood_summary'
 
@@ -71,7 +75,7 @@ CREATE INDEX IF NOT EXISTS idx_mv_airbnb_num_listings
 """
 
 default_args = {
-    "owner": "nazanin_hesari",
+    "owner": "parham_rahimi",
     "depends_on_past": False,
     "start_date": datetime(2026, 7, 1),
     "retries": 1,
@@ -119,7 +123,6 @@ with DAG(
                 if stmt and not stmt.startswith("--"):
                     conn.execute(text(stmt))
 
-        # verify it has rows
         with engine.connect() as conn:
             row_count = conn.execute(
                 text(f"SELECT count(*) FROM {MV_NAME}")
@@ -228,6 +231,6 @@ with DAG(
     config = read_config()
     refreshed = refresh_summary(config)
     validation = validate_summary(config)
-    refreshed >> validation  # validate must run after refresh completes
+    refreshed >> validation
     branch = choose_report_path(validation)
     branch >> [write_success_report(validation), write_failure_report(validation)]

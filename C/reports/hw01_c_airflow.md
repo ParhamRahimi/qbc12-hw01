@@ -1,12 +1,18 @@
 # HW01-C — Airflow Scheduled Pipeline
 
+**Author:** Parham Rahimi
+
+## Note on credentials
+
+My student ID was not in the credentials list provided on Quera.
+The bootcamp admin instructed me to use a random credential from the list.
+I'm using the `student_nazanin_hesari` database account (ID 1648).
+
 ## DAG
 
-**DAG ID:** `qbc12_hw01_nazanin_hesari_airbnb_pipeline`
+**DAG ID:** `qbc12_hw01_parham_rahimi_airbnb_pipeline`
 
 **Airflow URL:** http://185.50.38.163:33013
-
-**Login:** nazanin_hesari / Airflow password from credentials file
 
 ## Pipeline flow
 
@@ -22,7 +28,7 @@ read_config → refresh_summary → validate_summary → choose_report_path
 
 | Task | Description |
 |------|-------------|
-| `read_config` | Reads DB credentials from Airflow Variables (`qbc12_db_host`, `qbc12_db_port`, `qbc12_db_name`, `qbc12_db_user`, `qbc12_db_password`) |
+| `read_config` | Reads DB credentials from Airflow Variables with fallback defaults |
 | `refresh_summary` | Drops and recreates `student_nazanin_hesari.mv_airbnb_neighbourhood_summary` with 2 indexes |
 | `validate_summary` | Checks: row_count > 0, null_neighbourhoods = 0, bad_prices = 0, bad_availability = 0 |
 | `choose_report_path` | TaskFlow `@task.branch` — routes to success or failure |
@@ -31,23 +37,24 @@ read_config → refresh_summary → validate_summary → choose_report_path
 
 ## Airflow Variables required
 
-Set these in Airflow (Admin → Variables):
+| Key | Value |
+|-----|-------|
+| `qbc12_db_host` | `185.50.38.163` |
+| `qbc12_db_port` | `32112` |
+| `qbc12_db_name` | `qbc12_airbnb` |
+| `qbc12_db_user` | `student_nazanin_hesari` |
+| `qbc12_db_password` | (from credentials file) |
 
-- `qbc12_db_host`
-- `qbc12_db_port`
-- `qbc12_db_name`
-- `qbc12_db_user`
-- `qbc12_db_password`
+Variables have fallback defaults so the DAG works even without them set.
 
 ## How to run
 
-1. Log in to Airflow at http://185.50.38.163:33013
-2. Find `qbc12_hw01_nazanin_hesari_airbnb_pipeline`
-3. Unpause it
-4. Trigger manually (play button)
-5. Check Graph view and logs
+1. Deploy DAG to Airflow at http://185.50.38.163:33013
+2. Find `qbc12_hw01_parham_rahimi_airbnb_pipeline`
+3. Unpause and trigger manually
+4. Check Graph view and logs
 
 ## Screenshots
 
-- `screenshots/airflow_dag_graph.png` — DAG graph view showing all tasks
-- `screenshots/airflow_success_run.png` — Successful run with green tasks
+- `screenshots/airflow_dag_graph.png` — DAG graph view
+- `screenshots/airflow_success_run.png` — Successful run
